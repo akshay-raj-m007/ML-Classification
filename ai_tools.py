@@ -80,7 +80,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 )
 
 
-# Logistic Regression
+# Logistic Regression Classifier
 print("LOGISTIC REGRESSION")
 
 scaler = StandardScaler()
@@ -107,7 +107,7 @@ print("ROC-AUC:", roc_auc_score(y_test, y_prob_lr))
 print("Log Loss:", log_loss(y_test, y_prob_lr))
 
 
-# Random Forest
+# Random Forest Classifier
 print("RANDOM FOREST")
 
 rf = RandomForestClassifier(n_estimators=200, random_state=80)
@@ -149,7 +149,7 @@ print("Confusion Matrix:")
 cm = confusion_matrix(y_test, y_pred_gb)
 print(cm)
 ConfusionMatrixDisplay(cm).plot()
-plt.title("Gradient Boosting CM")
+plt.title("Gradient Boosting Confusion matrix")
 plt.show()
 
 print("\nClassification Report:")
