@@ -1,0 +1,156 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+
+\geometry{margin=1in}
+
+\title{Heart Failure Prediction Using Classical and Ensemble Machine Learning Models}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This study investigates the prediction of heart failure events using structured clinical data. 
+The objective is to compare linear and tree-based machine learning models and evaluate their predictive performance.
+
+\section{Exploratory Data Analysis (EDA)}
+
+\subsection{Dataset Overview}
+
+\begin{itemize}
+    \item Total rows (raw dataset): 5000
+    \item Unique rows after duplicate removal: 1320
+    \item Duplicate rows removed: 3680
+\end{itemize}
+
+A high duplication rate (73.6\%) was detected. Duplicate removal was necessary to prevent train-test contamination and artificially inflated model performance.
+
+\subsection{Missing Values}
+
+No significant missing values were detected in the dataset.
+
+\subsection{Class Distribution}
+
+The dataset is moderately imbalanced:
+\begin{itemize}
+    \item Survived (0): $\approx 68.6\%$
+    \item Death (1): $\approx 31.4\%$
+\end{itemize}
+
+Stratified train-test splitting was used to preserve this ratio.
+
+\subsection{Correlation Analysis}
+
+Pearson correlation with \texttt{DEATH\_EVENT} revealed:
+
+\begin{itemize}
+    \item Positive correlations:
+    \begin{itemize}
+        \item Serum Creatinine (0.29)
+        \item Age (0.22)
+        \item High Blood Pressure (0.11)
+    \end{itemize}
+    \item Negative correlations:
+    \begin{itemize}
+        \item Ejection Fraction (-0.27)
+        \item Serum Sodium (-0.25)
+        \item Time (-0.51)
+    \end{itemize}
+\end{itemize}
+
+The \texttt{time} variable showed strong correlation but was removed due to potential data leakage.
+
+\section{Data Preprocessing}
+
+\begin{itemize}
+    \item Duplicates removed.
+    \item Feature \texttt{time} removed to prevent leakage.
+    \item Stratified 80-20 train-test split used.
+    \item Standard scaling applied only for Logistic Regression.
+\end{itemize}
+
+\section{Model Comparison}
+
+Four models were evaluated:
+
+\begin{itemize}
+    \item Logistic Regression
+    \item Random Forest
+    \item Gradient Boosting
+    \item XGBoost
+\end{itemize}
+
+\subsection{Performance Metrics}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+Model & Train Log Loss & Test Log Loss & Accuracy & Recall (Death) & ROC-AUC \\
+\midrule
+Logistic Regression & 0.493 & 0.454 & 0.80 & 0.51 & 0.857 \\
+Random Forest & 0.066 & 0.197 & 0.94 & 0.85 & 0.985 \\
+Gradient Boosting & 0.134 & 0.192 & 0.94 & 0.84 & 0.983 \\
+XGBoost & 0.122 & 0.201 & 0.92 & 0.81 & 0.979 \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of Model Performance}
+\end{table}
+
+\section{Discussion}
+
+\subsection{Logistic Regression}
+
+Logistic Regression exhibited higher bias and limited ability to capture nonlinear interactions. 
+Although stable (small train-test gap), recall for death cases was relatively low (51\%).
+
+\subsection{Random Forest}
+
+Random Forest achieved the highest ROC-AUC (0.985) and recall (85\%). 
+However, the very low training loss indicates moderate variance.
+
+\subsection{Gradient Boosting}
+
+Gradient Boosting demonstrated strong generalization with controlled train-test gap. 
+Performance was slightly below Random Forest but more regularized.
+
+\subsection{XGBoost}
+
+XGBoost achieved strong ROC-AUC (0.979) and balanced bias-variance tradeoff. 
+Regularization mechanisms prevented extreme overfitting while maintaining competitive recall.
+
+\section{Bias-Variance Perspective}
+
+\begin{itemize}
+    \item Logistic Regression: High bias, low variance.
+    \item Random Forest: Low bias, moderate variance.
+    \item Gradient Boosting: Balanced bias-variance.
+    \item XGBoost: Regularized boosting with controlled variance.
+\end{itemize}
+
+\section{Conclusion}
+
+After removing duplicates and preventing leakage, ensemble tree-based methods significantly outperformed Logistic Regression.
+
+Random Forest achieved the best overall performance in terms of ROC-AUC and recall for death prediction.
+
+XGBoost and Gradient Boosting also demonstrated strong performance, confirming that nonlinear models are more suitable for structured medical datasets with interaction effects.
+
+\section{Future Work}
+
+\begin{itemize}
+    \item Perform k-fold cross-validation for robust comparison.
+    \item Tune hyperparameters using grid search.
+    \item Calibrate probabilities for improved clinical decision support.
+    \item Explore SHAP values for interpretability.
+\end{itemize}
+
+\end{document}
