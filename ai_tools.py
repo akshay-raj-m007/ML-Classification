@@ -21,23 +21,23 @@ from xgboost import XGBClassifier
 data = pd.read_csv("heart_failure_clinical_records.csv")
 print(data.head())
 
-print("*"*70)
+ 
 print("Shape:", data.shape)
-print("*"*70)
+ 
 print("Columns:", data.columns)
-print("*"*70)
+ 
 print("Data types:\n", data.dtypes)
-print("*"*70)
+ 
 print("Null values:\n", data.isnull().sum())
-print("*"*70)
+ 
 print("Duplicate rows:", data.duplicated().sum())
 
 data = data.drop_duplicates()
 
-print("*"*70)
+ 
 print("Descriptive Statistics:\n", data.describe())
 
-print("*"*70)
+ 
 print("Class Distribution (%):")
 print(data['DEATH_EVENT'].value_counts(normalize=True) * 100)
 
@@ -81,7 +81,6 @@ x_train, x_test, y_train, y_test = train_test_split(
 
 
 # Logistic Regression
-print("\n" + "="*50)
 print("LOGISTIC REGRESSION")
 
 scaler = StandardScaler()
@@ -109,7 +108,6 @@ print("Log Loss:", log_loss(y_test, y_prob_lr))
 
 
 # Random Forest
-print("\n" + "="*50)
 print("RANDOM FOREST")
 
 rf = RandomForestClassifier(n_estimators=200, random_state=80)
@@ -133,7 +131,6 @@ print("Log Loss:", log_loss(y_test, y_prob_rf))
 
 
 # Gradient Boosting
-print("\n" + "="*50)
 print("GRADIENT BOOSTING")
 
 gb = GradientBoostingClassifier(
@@ -164,7 +161,6 @@ print("Test Log Loss:", log_loss(y_test, y_prob_gb))
 
 
 # XGBoost
-print("\n" + "="*50)
 print("XGBOOST")
 
 xgb = XGBClassifier(
